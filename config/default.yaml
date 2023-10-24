@@ -1,0 +1,7 @@
+---
+APPLICATION_DB: "myapp"
+DATASTORE_DRIVER: "postgres"
+DATASTORE_URL: "postgres://myapp:supersecret@db:5432/myapp?sslmode=disabled"
+GRPC_PORT: 9101
+HTTP_PORT: 9102
+HEALTH_PORT: 6060
