@@ -23,6 +23,9 @@ type Config struct {
 	HealthPort     string `mapstructure:"HEALTH_PORT"`
 
 	LogLevel string `mapstructure:"LOG_LEVEL"`
+
+	GethAddress string `mapstructure:"GETH_ADDRESS"`
+	GethURL     string `mapstructure:"GETH_URL"`
 }
 
 func LoadConfig(log *logrus.Logger, configObject *Config, fileNames ...string) (*viper.Viper, error) {
@@ -63,6 +66,8 @@ func (c *Config) LogFields() map[string]interface{} {
 		"Config.GRPCPort":       c.GRPCPort,
 		"Config.HealthPort":     c.HealthPort,
 		"Config.LogLevel":       c.LogLevel,
+		"Config.GethAddress":    c.GethAddress,
+		"Config.GethURL":        c.GethURL,
 	}
 }
 

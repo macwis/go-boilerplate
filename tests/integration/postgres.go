@@ -4,14 +4,15 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"testing"
+	"time"
+
 	"github.com/docker/go-connections/nat"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 	"github.com/uptrace/bun/driver/pgdriver"
-	"testing"
-	"time"
 )
 
 type PostgresServer struct {
@@ -28,8 +29,11 @@ func (p PostgresServer) Port(t *testing.T) int {
 }
 
 func (p PostgresServer) Close(t *testing.T) {
-	//TODO implement me
-	panic("implement me")
+	if !ReuseContainers {
+		ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+		defer cancel()
+		require.NoError(t, p.instance.Terminate(ctx))
+	}
 }
 
 func (p PostgresServer) Address(t *testing.T) string {
@@ -95,7 +99,7 @@ func NewPostgresServer(t *testing.T, ctx context.Context, dockerNetwork *testcon
 		),
 		Networks:       []string{dockerNetwork.Name},
 		NetworkAliases: map[string][]string{dockerNetwork.Name: {PgHost}},
-		Cmd:            []string{"postgres", "-c", "log_statement=all", "-c", "log_desintation=stderr"},
+		Cmd:            []string{"postgres", "-c", "log_statement=all", "-c", "log_destination=stderr"},
 	}
 	postgres, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
 		ContainerRequest: req,

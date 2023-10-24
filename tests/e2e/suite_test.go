@@ -2,12 +2,14 @@ package e2e
 
 import (
 	"context"
-	"github.com/macwis/go-boilerplate/internal/service/di"
-	"github.com/macwis/go-boilerplate/tests/integration"
-	"github.com/stretchr/testify/require"
-	"github.com/stretchr/testify/suite"
 	"syscall"
 	"testing"
+
+	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/suite"
+
+	"github.com/macwis/go-boilerplate/internal/service/di"
+	"github.com/macwis/go-boilerplate/tests/integration"
 )
 
 type MyAppIntegrationService struct {

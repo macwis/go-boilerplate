@@ -2,13 +2,14 @@ package integration
 
 import (
 	"context"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/require"
 	"os"
 	"path/filepath"
 	"runtime"
 	"testing"
 	"time"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/require"
 
 	"github.com/testcontainers/testcontainers-go"
 
@@ -33,7 +34,7 @@ func CreateDockerNetwork(t *testing.T, ctx context.Context, name *string) *testc
 			name = lo.ToPtr(uuid.NewString())
 		}
 	}
-	t.Logf("docker network name: #{lo.FromPtr(name))}")
+	t.Logf("docker network name: %s", lo.FromPtr(name))
 
 	network, err := testcontainers.GenericNetwork(ctx, testcontainers.GenericNetworkRequest{
 		NetworkRequest: testcontainers.NetworkRequest{Name: *name},
@@ -99,13 +100,13 @@ func NewTestCluster(t *testing.T, ctx context.Context, options ...func(*TestClus
 func WithAll() func(cluster *TestCluster) {
 	return func(tc *TestCluster) {
 		tc.Postgres = NewPostgresServer(tc.t, tc.ctx, tc.network)
+		tc.Ganache = NewGanacheServer(tc.t, tc.ctx, tc.network)
 		//tc.Redis = NewRedisServer(tc.t, tc.ctx, tc.network)
-		//tc.Ganache = NewGanacheServer(tc.t, tc.ctx, tc.network)
 		//tc.OTEL = NewOTELServer(tc.t, tc.ctx, tc.network)
 
 		tc.Postgres.Prep(tc.t)
+		tc.Ganache.Prep(tc.t)
 		//tc.Redis.Prep(tc.t)
-		//tc.Ganache.Prep(tc.t)
 		//tc.OTEL.Prep(tc.t)
 	}
 }
@@ -114,5 +115,12 @@ func WithPostgres() func(*TestCluster) {
 	return func(tc *TestCluster) {
 		tc.Postgres = NewPostgresServer(tc.t, tc.ctx, tc.network)
 		tc.Postgres.Prep(tc.t)
+	}
+}
+
+func WithGanache() func(*TestCluster) {
+	return func(tc *TestCluster) {
+		tc.Ganache = NewGanacheServer(tc.t, tc.ctx, tc.network)
+		tc.Ganache.Prep(tc.t)
 	}
 }

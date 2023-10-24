@@ -2,11 +2,12 @@ package integration
 
 import (
 	"context"
+	"testing"
+
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
-	"testing"
 )
 
 const (
@@ -36,6 +37,7 @@ func NewFlywayMigrationService(
 			"POSTGRES_USER":           PgUser,
 			"POSTGRES_PASSWORD":       PgPassword,
 			"POSTGRES_DB":             PgDB,
+			"APPLICATION_DB_HOST":     PgHost,
 			"APPLICATION_DB":          PgAppDB,
 			"APPLICATION_DB_USERNAME": PgAppUser,
 			"APPLICATION_DB_PASSWORD": PgAppPassword,
